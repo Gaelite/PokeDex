@@ -319,6 +319,18 @@ class PokemonSearchEngine:
             full_text = f"{doc['title']} {doc['text']}"
             if "type" in doc:
                 full_text += " " + " ".join(doc["type"])
+            if "category" in doc:
+                full_text += " " + doc["category"]
+            if "genus" in doc:
+                full_text += " " + doc.get("genus", "")
+            if "abilities" in doc and isinstance(doc["abilities"], list):
+                full_text += " " + " ".join(doc["abilities"])
+            if "egg_groups" in doc and isinstance(doc["egg_groups"], list):
+                full_text += " " + " ".join(doc["egg_groups"])
+            if "habitat" in doc:
+                full_text += " " + doc.get("habitat", "")
+            if "color" in doc:
+                full_text += " " + doc.get("color", "")
 
             # Build raw vocabulary (unstemmed) for spell correction and autocomplete
             raw_tokens = self.processor.tokenize_no_stem(full_text)
