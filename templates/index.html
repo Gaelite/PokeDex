@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokeSearch Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <h1 class="title">POKE<span class="title-accent">SEARCH</span></h1>
+            <p class="subtitle">BM25-Powered Pokedex Search Engine</p>
+        </header>
+
+        <!-- SEARCH BAR -->
+        <div class="search-section">
+            <form action="/search" method="GET" class="search-form" id="searchForm">
+                <div class="search-wrapper">
+                    <div class="search-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                    </div>
+                    <input
+                        type="text"
+                        name="q"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="Search Pokemon... try fire dragon legendary"
+                        value="{{ query or '' }}"
+                        autocomplete="off"
+                    />
+                    <button type="submit" class="search-btn">SEARCH</button>
+                </div>
+                <!-- Autocomplete dropdown -->
+                <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
+            </form>
+        </div>
+
+        <!-- STATS BAR -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-value">{{ stats.total_documents }}</span>
+                <span class="stat-label">Indexed</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ stats.vocabulary_size }}</span>
+                <span class="stat-label">Terms</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">{{ stats.avg_doc_length }}</span>
+                <span class="stat-label">Avg Length</span>
+            </div>
+            {% if results %}
+            <div class="stat-item stat-highlight">
+                <span class="stat-value">{{ results.time }}ms</span>
+                <span class="stat-label">Search Time</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- RESULTS SECTION -->
+        {% if results %}
+
+            <!-- Spell correction -->
+            {% if results.corrections %}
+            <div class="spell-correction">
+                <span class="spell-label">Did you mean:</span>
+                {% for word, suggestions in results.corrections.items() %}
+                    {% for suggestion in suggestions %}
+                    <a href="/search?q={{ suggestion }}" class="spell-suggestion">{{ suggestion }}</a>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Results header -->
+            <div class="results-header">
+                <span class="results-count">
+                    <strong>{{ results.total_results }}</strong> result{{ 's' if results.total_results != 1 else '' }}
+                    for "<em>{{ results.query }}</em>"
+                </span>
+                <span class="processed-terms">
+                    {{ results.processed_terms | join(', ') }}
+                </span>
+            </div>
+
+            {% if results.results %}
+            <div class="results-grid">
+                {% for result in results.results %}
+                <div class="pokemon-card"
+                     data-query="{{ results.query }}"
+                     data-pokemon='{{ result | tojson }}'
+                     style="animation-delay: {{ loop.index0 * 0.04 }}s">
+
+                    <!-- Card top: sprite + basic info -->
+                    <div class="card-top">
+                        <img
+                            class="card-sprite"
+                            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ result.id }}.png"
+                            alt="{{ result.title }}"
+                            loading="lazy"
+                            onerror="this.style.display='none'"
+                        />
+                        <div class="card-info">
+                            <span class="card-number">#{{ '%04d' | format(result.id) }}</span>
+                            <h2 class="card-name">{{ result.title }}</h2>
+                            <div class="type-badges">
+                                {% for t in result.type %}
+                                <span class="type-badge type-{{ t | lower }}">{{ t }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="card-score" title="BM25 Score">{{ result.score }}</div>
+                    </div>
+
+                    <!-- Card body: description -->
+                    <p class="card-text" data-query="{{ results.query }}">
+                        {{ result.text[:200] }}{% if result.text|length > 200 %}...{% endif %}
+                    </p>
+
+                    <!-- Card footer -->
+                    <div class="card-footer">
+                        <span class="card-meta">Gen {{ result.generation }}</span>
+                        <span class="card-meta">{{ result.category }}</span>
+                        <button class="cry-btn" data-cry="https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/{{ result.id }}.ogg" title="Play cry">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5,3 19,12 5,21"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-results">
+                <p>No Pokemon found for "<strong>{{ results.query }}</strong>"</p>
+                <p class="no-results-hint">Try different keywords like "fire", "legendary", or "dragon"</p>
+            </div>
+            {% endif %}
+
+        {% elif query is not none and query == '' %}
+        {% else %}
+
+        <!-- LANDING STATE -->
+        <div class="landing">
+            <p class="landing-text">Search through the Pokedex using natural language queries.</p>
+            <div class="example-queries">
+                <span class="example-label">Try:</span>
+                <a href="/search?q=fire+dragon" class="example-query">fire dragon</a>
+                <a href="/search?q=legendary+psychic" class="example-query">legendary psychic</a>
+                <a href="/search?q=evolution+eevee" class="example-query">evolution eevee</a>
+                <a href="/search?q=ghost+poison" class="example-query">ghost poison</a>
+                <a href="/search?q=starter+water" class="example-query">starter water</a>
+                <a href="/search?q=mega+powerful" class="example-query">mega powerful</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- DETAIL MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent">
+            <button class="modal-close" id="modalClose">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div class="modal-body" id="modalBody">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>PokeSearch Engine -- BM25 Ranking, Autocomplete, Spell Correction</p>
+        <p class="footer-sub">Data sourced from PokeAPI</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
