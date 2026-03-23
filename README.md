@@ -26,6 +26,28 @@ Uses the Levenshtein edit distance algorithm to detect misspelled words in the q
 
 As the user types in the search bar, prefix-based suggestions appear in real time. The suggestions are ranked by term frequency in the corpus, so more common and relevant words appear first. Supports keyboard navigation with arrow keys.
 
+## Screenshots
+
+### Landing Page
+
+<img width="1193" height="948" alt="Screenshot 2026-03-22 at 10 33 44 p m" src="https://github.com/user-attachments/assets/f8722e1a-cf1a-43d2-803e-ce5b25e5cb68" />
+
+### Search Results
+
+<img width="1528" height="978" alt="Screenshot 2026-03-22 at 10 34 08 p m" src="https://github.com/user-attachments/assets/b3b45cde-2fe2-48f5-a6e4-6819dce0a97a" />
+
+### Autocomplete
+
+<img width="1347" height="349" alt="Screenshot 2026-03-22 at 10 34 36 p m" src="https://github.com/user-attachments/assets/5e2f768c-e69c-4105-96df-5f0515ea4955" />
+
+### Spell Correction
+
+<img width="1328" height="727" alt="Screenshot 2026-03-22 at 10 34 54 p m" src="https://github.com/user-attachments/assets/9a455e43-326e-45cb-b23d-81ad4dc4014a" />
+
+### Detail Modal
+
+<img width="1535" height="953" alt="Screenshot 2026-03-22 at 10 35 17 p m" src="https://github.com/user-attachments/assets/af57496a-145d-48e6-9b39-74ff7e8dc5f4" />
+
 ## Instructions to Run Locally
 
 ### Prerequisites
