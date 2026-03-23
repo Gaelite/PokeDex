@@ -102,8 +102,7 @@
                     <div class="card-top">
                         <img
                             class="card-sprite"
-                            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ result.id }}.png"
-                            alt="{{ result.title }}"
+                            src="{{ result.sprite if result.sprite else 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' ~ result.id ~ '.png' }}"                            alt="{{ result.title }}"
                             loading="lazy"
                             onerror="this.style.display='none'"
                         />
@@ -128,7 +127,7 @@
                     <div class="card-footer">
                         <span class="card-meta">Gen {{ result.generation }}</span>
                         <span class="card-meta">{{ result.category }}</span>
-                        <button class="cry-btn" data-cry="https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/{{ result.id }}.ogg" title="Play cry">
+                        <button class="cry-btn" data-cry="{{ result.cry if result.cry else 'https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/' ~ result.id ~ '.ogg' }}" title="Play cry">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                 <polygon points="5,3 19,12 5,21"/>
                             </svg>
@@ -152,12 +151,11 @@
             <p class="landing-text">Search through the Pokedex using natural language queries.</p>
             <div class="example-queries">
                 <span class="example-label">Try:</span>
-                <a href="/search?q=fire+dragon" class="example-query">fire dragon</a>
-                <a href="/search?q=legendary+psychic" class="example-query">legendary psychic</a>
-                <a href="/search?q=evolution+eevee" class="example-query">evolution eevee</a>
-                <a href="/search?q=ghost+poison" class="example-query">ghost poison</a>
-                <a href="/search?q=starter+water" class="example-query">starter water</a>
-                <a href="/search?q=mega+powerful" class="example-query">mega powerful</a>
+                <a href="/search?q=Fire+dragon" class="example-query">Fire dragon</a>
+                <a href="/search?q=Legendary+psychic" class="example-query">Legendary psychic</a>
+                <a href="/search?q=Evo+eevee" class="example-query">Evo eevee</a>
+                <a href="/search?q=Ghost+poison" class="example-query">Ghost poison</a>
+                <a href="/search?q=Starter+water" class="example-query">Starter water</a>
             </div>
         </div>
         {% endif %}

@@ -45239,5 +45239,47 @@
     "sprite": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1025.png",
     "sprite_official": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1025.png",
     "cry": "https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/1025.ogg"
-  }
+  },
+  {
+    "id": 9001,
+    "pokedex_id": 9001,
+    "title": "Kirby",
+    "type": [
+      "Fairy",
+      "Normal"
+    ],
+    "generation": 0,
+    "category": "Star Warrior",
+    "genus": "Dream Land Pokémon",
+    "source": "https://kirby.nintendo.com/",
+    "text": "Kirby is a Fairy and Normal type Pokémon introduced in a hidden generation. It is known as the Star Warrior Pokémon. Kirby is a small pink hero from Dream Land who protects his friends using his unique ability to inhale enemies and copy their powers. This entry only appears for someone special.",
+    "stats": {
+      "hp": 100,
+      "attack": 85,
+      "defense": 80,
+      "special-attack": 85,
+      "special-defense": 80,
+      "speed": 70
+    },
+    "height": 0.2,
+    "weight": 4.5,
+    "color": "Pink",
+    "shape": "Ball",
+    "habitat": "Dream Land",
+    "growth_rate": "Slow",
+    "capture_rate": 255,
+    "base_happiness": 255,
+    "egg_groups": [
+      "No Eggs"
+    ],
+    "abilities": [
+      "Copy Ability"
+    ],
+    "is_legendary": true,
+    "is_mythical": true,
+    "is_baby": false,
+    "evolves_from": "",
+    "sprite": "/static/kirby.png",
+    "sprite_official": "https://upload.wikimedia.org/wikipedia/en/3/3e/Kirby_Nintendo.png",
+    "cry": "/static/kirby_cry.mp3"  }
 ]

@@ -46,6 +46,8 @@ def search():
         result["abilities"] = doc.get("abilities", [])
         result["evolves_from"] = doc.get("evolves_from", "")
         result["genus"] = doc.get("genus", "")
+        result["sprite"] = doc.get("sprite", "")
+        result["cry"] = doc.get("cry", "")
 
     stats = engine.get_stats()
     return render_template("index.html", results=results, stats=stats, query=query)
